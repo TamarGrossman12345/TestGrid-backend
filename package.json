@@ -1,10 +1,11 @@
 {
   "name": "testgrid-backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
+    "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio"
@@ -20,11 +21,13 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.3.2",
     "nodemon": "^3.1.14",
     "prisma": "^7.4.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
