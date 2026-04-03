@@ -1,0 +1,24 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  projectName String
+  description String?
+  tests       Test[]   
+}
+
+model Test {
+  id              String    @id @default(uuid())
+  title           String
+  testSteps       String
+  expectedResults String    
+  status          String
+  projects        Project[] 
+}
