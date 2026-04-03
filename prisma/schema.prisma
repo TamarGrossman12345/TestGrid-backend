@@ -11,14 +11,24 @@ model Project {
   id          String   @id @default(uuid())
   projectName String
   description String?
-  tests       Test[]   
+  isPrivate   Boolean    @default(false)
+  files       TestFile[]
 }
 
-model Test {
+model TestFile {
+  id        String     @id @default(uuid())
+  name      String
+projectId String
+  project   Project    @relation(fields: [projectId], references: [id])
+  testCases TestCase[] 
+}
+
+model TestCase {
   id              String    @id @default(uuid())
   title           String
   testSteps       String
   expectedResults String    
   status          String
-  projects        Project[] 
+  fileId          String
+  testFile        TestFile @relation(fields: [fileId], references: [id])
 }

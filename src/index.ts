@@ -45,6 +45,7 @@ app.get('/projects', async (req, res) => {
     res.json(projects);
   } catch (error) {
     res.status(500).json({ error: "Could not fetch projects" });
+    console.error(error);
   }
 });
 
