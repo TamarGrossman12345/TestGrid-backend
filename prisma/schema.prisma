@@ -4,11 +4,11 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 model Project {
-  id          String   @id @default(uuid())
+  projectId   String     @id @default(uuid())
   projectName String
   description String?
   isPrivate   Boolean    @default(false)
@@ -16,19 +16,21 @@ model Project {
 }
 
 model TestFile {
-  id        String     @id @default(uuid())
-  name      String
-projectId String
-  project   Project    @relation(fields: [projectId], references: [id])
-  testCases TestCase[] 
+  TestFileId  String     @id @default(uuid())
+  name        String
+  description String?
+  projectId   String
+  project     Project    @relation(fields: [projectId], references: [projectId])
+  testCases   TestCase[]
 }
 
+
 model TestCase {
-  id              String    @id @default(uuid())
+  TestCaseId      String   @id @default(uuid())
   title           String
   testSteps       String
-  expectedResults String    
+  expectedResults String
   status          String
   fileId          String
-  testFile        TestFile @relation(fields: [fileId], references: [id])
+  testFile        TestFile @relation(fields: [fileId], references: [TestFileId])
 }
