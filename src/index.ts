@@ -22,30 +22,49 @@ app.get('/', (req: Request, res: Response) => {
 // נתיב ליצירת פרויקט חדש
 app.post('/projects', async (req, res) => {
   try {
-    const { projectName, description } = req.body;
-
-    const newProject = await prisma.project.create({
-      data: {
-        projectName,
-        description,
-      },
+    const { projectName, description, isPrivate } = req.body;
+    const project = await prisma.project.create({
+      data: { projectName, description, isPrivate }
     });
-
-    res.status(201).json(newProject);
+    res.json(project);
   } catch (error) {
     res.status(500).json({ error: "Failed to create project" });
-    console.error(error);
   }
 });
 
-// נתיב לקבלת כל הפרויקטים
+
 app.get('/projects', async (req, res) => {
   try {
-    const projects = await prisma.project.findMany();
+    const projects = await prisma.project.findMany({
+      include: {
+        files: true // פריזמה אוטומטית תצרף לכל פרויקט את רשימת הקבצים שלו
+      }
+    });
     res.json(projects);
   } catch (error) {
     res.status(500).json({ error: "Could not fetch projects" });
+  }
+});
+
+
+// נתיב ליצירת קובץ חדש בתוך פרויקט
+app.post('/files', async (req, res) => {
+  try {
+    // אנחנו מצפים לקבל מהפרונטנד שם, תיאור ואת ה-ID של הפרויקט האב
+    const { name, description, projectId } = req.body;
+
+    const newFile = await prisma.testFile.create({
+      data: {
+        name,
+        description,
+        projectId, // זה ה-Foreign Key שמקשר את הקובץ לפרויקט הנכון!
+      },
+    });
+
+    res.status(201).json(newFile);
+  } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Failed to create file" });
   }
 });
 
