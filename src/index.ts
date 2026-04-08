@@ -69,7 +69,7 @@ app.post("/files", async (req, res) => {
       data: {
         name,
         description,
-        projectId, 
+        projectId,
       },
     });
 
@@ -109,32 +109,42 @@ app.get("/testCase/:fileId", async (req, res) => {
   }
 });
 
-
-app.post('/testCases/newTestCase/:fileId', async (req, res) => {
+app.post("/testCases/newTestCase/:fileId", async (req, res) => {
   const { fileId } = req.params;
   const { title, testSteps, expectedResults, status } = req.body;
 
   try {
+    const lastTestCase = await prisma.testCase.findFirst({
+      where: {
+        serialId: { not: null },
+      },
+      orderBy: { serialId: "desc" },
+      select: { serialId: true },
+    });
+
+    const nextSerialId = (lastTestCase?.serialId ?? 0) + 1;
+
     const newTestCase = await prisma.testCase.create({
       data: {
         title,
         testSteps,
         expectedResults,
         status,
-        fileId 
+        fileId,
+        serialId: nextSerialId,
       },
     });
+
     res.status(201).json(newTestCase);
   } catch (error: any) {
-    res.status(500).json({ error: "failed to create test case", details: error.message });
+    res
+      .status(500)
+      .json({ error: "failed to create test case", details: error.message });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`-----------------------------------------`);
   console.log(`Server is running on: http://localhost:${PORT}`);
   console.log(`-----------------------------------------`);
 });
-
-

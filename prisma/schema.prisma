@@ -27,6 +27,7 @@ model TestFile {
 
 model TestCase {
   TestCaseId      String   @id @default(uuid())
+  serialId         Int?      @unique 
   title           String
   testSteps       String
   expectedResults String
