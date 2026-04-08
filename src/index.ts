@@ -26,8 +26,9 @@ app.post('/projects', async (req, res) => {
     const project = await prisma.project.create({
       data: { projectName, description, isPrivate }
     });
-    res.json(project);
+    res.json({ message: "Project created successfully", project });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Failed to create project" });
   }
 });
@@ -42,10 +43,24 @@ app.get('/projects', async (req, res) => {
     });
     res.json(projects);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Could not fetch projects" });
   }
 });
 
+app.delete('/projects/:id/', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedProject = await prisma.project.delete({ 
+      where: { projectId: id } 
+    });
+
+    res.json({ message: "Project deleted successfully", deletedProject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not delete project" });
+  }
+});
 
 // נתיב ליצירת קובץ חדש בתוך פרויקט
 app.post('/files', async (req, res) => {
@@ -61,13 +76,26 @@ app.post('/files', async (req, res) => {
       },
     });
 
-    res.status(201).json(newFile);
+    res.status(201).json({ message: "File created successfully", newFile});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create file" });
   }
 });
 
+app.delete('/files/:id/', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedFile = await prisma.testFile.delete({ 
+      where: { TestFileId: id } 
+    });
+
+    res.json({ message: "File deleted successfully", deletedFile });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not delete file" });
+  }
+});
 
 
 app.listen(PORT, () => {

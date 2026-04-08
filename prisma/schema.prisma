@@ -20,7 +20,7 @@ model TestFile {
   name        String
   description String?
   projectId   String
-  project     Project    @relation(fields: [projectId], references: [projectId])
+  project     Project    @relation(fields: [projectId], references: [projectId], onDelete: Cascade)
   testCases   TestCase[]
 }
 
@@ -32,5 +32,5 @@ model TestCase {
   expectedResults String
   status          String
   fileId          String
-  testFile        TestFile @relation(fields: [fileId], references: [TestFileId])
+  testFile        TestFile @relation(fields: [fileId], references: [TestFileId], onDelete: Cascade)
 }
