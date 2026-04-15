@@ -2,8 +2,6 @@ import express from "express";
 import prisma from "../db.js";
 const router = express.Router();
 
-
-
 router.post("/create-folder", async (req, res) => {
   try {
     const { name, description, projectId } = req.body;
