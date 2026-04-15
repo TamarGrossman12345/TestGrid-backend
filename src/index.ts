@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 import cors from "cors";
 import prisma from "./db.js";
 import projectRouter from "./routes/projects.routes.js";
+import folderRouter from "./routes/testFolders.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +14,7 @@ app.use(express.json()); // מאפשר לשרת לקרוא JSON שנשלח ב-Bo
 
 
 app.use("/api/projects", projectRouter);
+app.use("/api/folders", folderRouter);
 
 
 // נתיב בדיקה בסיסי (Route)
@@ -21,41 +23,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 
-
-
-
-app.post("/files", async (req, res) => {
-  try {
-    const { name, description, projectId } = req.body;
-
-    const newFile = await prisma.testFile.create({
-      data: {
-        name,
-        description,
-        projectId,
-      },
-    });
-
-    res.status(201).json({ message: "File created successfully", newFile });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to create file" });
-  }
-});
-
-app.delete("/files/:id/", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const deletedFile = await prisma.testFile.delete({
-      where: { TestFileId: id },
-    });
-
-    res.json({ message: "File deleted successfully", deletedFile });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Could not delete file" });
-  }
-});
 
 app.get("/testCase/:fileId", async (req, res) => {
   try {
