@@ -1,11 +1,8 @@
 import express from "express";
 import type { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import prisma from "./db.js";
-
-// טעינת משתני סביבה מקובץ .env
-dotenv.config();
+import projectRouter from "./routes/projects.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,52 +11,18 @@ const PORT = process.env.PORT || 5000;
 app.use(cors()); // מאפשר לפרונטנד שלך (שיושב על פורט אחר) לדבר עם השרת
 app.use(express.json()); // מאפשר לשרת לקרוא JSON שנשלח ב-Body של בקשות POST
 
+
+app.use("/api/projects", projectRouter);
+
+
 // נתיב בדיקה בסיסי (Route)
 app.get("/", (req: Request, res: Response) => {
   res.send("TestGrid API is running successfully! 🚀");
 });
 
-// נתיב ליצירת פרויקט חדש
-app.post("/projects", async (req, res) => {
-  try {
-    const { projectName, description, isPrivate } = req.body;
-    const project = await prisma.project.create({
-      data: { projectName, description, isPrivate },
-    });
-    res.json({ message: "Project created successfully", project });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to create project" });
-  }
-});
 
-app.get("/projects", async (req, res) => {
-  try {
-    const projects = await prisma.project.findMany({
-      include: {
-        files: true, // פריזמה אוטומטית תצרף לכל פרויקט את רשימת הקבצים שלו
-      },
-    });
-    res.json(projects);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Could not fetch projects" });
-  }
-});
 
-app.delete("/projects/:id/", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const deletedProject = await prisma.project.delete({
-      where: { projectId: id },
-    });
 
-    res.json({ message: "Project deleted successfully", deletedProject });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Could not delete project" });
-  }
-});
 
 app.post("/files", async (req, res) => {
   try {
