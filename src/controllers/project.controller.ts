@@ -1,7 +1,10 @@
 import express from "express";
 import type { Request, Response } from "express";
-
-import { createNewProject, getProjects, deleteProjectById } from "../services/project.service.js";
+import {
+  createNewProject,
+  getProjects,
+  deleteProjectById,
+} from "../services/project.service.js";
 
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -25,7 +28,7 @@ export const getAllProjects = async (req: Request, res: Response) => {
 };
 
 export const deleteProject = async (req: Request, res: Response) => {
-    try {
+  try {
     const id = req.params.id as string;
     const deletedProject = await deleteProjectById(id);
 
@@ -34,4 +37,4 @@ export const deleteProject = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ error: "Could not delete project" });
   }
-}
+};
