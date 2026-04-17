@@ -31,7 +31,6 @@ export const deleteProject = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
     const deletedProject = await deleteProjectById(id);
-
     res.json({ message: "Project deleted successfully", deletedProject });
   } catch (error) {
     console.error(error);

@@ -1,31 +1,31 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            // אפשרות 1: דיבאג ל-Backend (Node.js עם TypeScript)
-            "type": "node",
-            "request": "launch",
-            "name": "Debug Backend (tsx)",
-            "runtimeExecutable": "npx",
-            "runtimeArgs": [
-                "tsx",
-                "watch", 
-                "${workspaceFolder}/src/index.ts" 
-            ],
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
-        },
-        {
-            // אפשרות 2: דיבאג ל-Frontend (Chrome)
-            // ודאי שה-Vite שלך רץ (npm run dev) לפני שאת מפעילה את זה
-            "type": "chrome",
-            "request": "launch",
-            "name": "Debug Frontend (Chrome)",
-            "url": "http://localhost:5173", 
-            "webRoot": "${workspaceFolder}/src"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // אפשרות 1: דיבאג ל-Backend (Node.js עם TypeScript)
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Backend (tsx)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["tsx", "--inspect", "${workspaceFolder}/src/index.ts"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true, 
+      "smartStep": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ]
+    },
+    {
+      // אפשרות 2: דיבאג ל-Frontend (Chrome)
+      // ודאי שה-Vite שלך רץ (npm run dev) לפני שאת מפעילה את זה
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Frontend (Chrome)",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src"
+    }
+  ]
 }
