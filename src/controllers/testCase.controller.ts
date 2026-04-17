@@ -2,7 +2,9 @@ import type { Request, Response } from "express";
 import {
   createNewTestCase,
   getTestCasesByFolderId,
+  updateTestCaseById,
 } from "../services/testCase.service.js";
+
 
 export const getTestCases = async (req: Request, res: Response) => {
   try {
@@ -32,5 +34,22 @@ export const createTestCase = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ error: "failed to create test case", details: error.message });
+  }
+};
+
+export const updateTestCase = async (req: Request, res: Response) => {
+  const { testCaseId } = req.params;
+  const updateData = req.body;
+  try {
+    const updatedTestCase = await updateTestCaseById(
+      testCaseId as string,
+      updateData,
+    );
+
+    res.status(200).json(updatedTestCase);
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "failed to update test case", details: error.message });
   }
 };

@@ -1,5 +1,13 @@
 import prisma from "../db.js";
 
+export interface TestCase {
+  TestCaseId: string;
+  serialId: number;
+  title: string;
+  testSteps: string;
+  expectedResults: string;
+}
+
 export const getTestCasesByFolderId = async (folderId: string) => {
   const testCases = await prisma.testCase.findMany({
     where: { fileId: folderId },
@@ -36,4 +44,18 @@ export const createNewTestCase = async (
     },
   });
   return newTestCase;
+};
+
+export const updateTestCaseById = async (
+  testCasesId: string,
+  data: Partial<TestCase>,
+) => {
+  const updatedTestCase = await prisma.testCase.update({
+    where: {
+      TestCaseId: testCasesId,
+    },
+    data: data,
+  });
+
+  return updatedTestCase;
 };
