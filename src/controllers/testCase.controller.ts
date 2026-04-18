@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import {
   createNewTestCase,
+  deleteTestCaseById,
   getTestCasesByFolderId,
   updateTestCaseById,
 } from "../services/testCase.service.js";
@@ -53,3 +54,17 @@ export const updateTestCase = async (req: Request, res: Response) => {
       .json({ error: "failed to update test case", details: error.message });
   }
 };
+
+
+export const deleteTestCase = async (req: Request, res: Response) => {
+  const { testCaseId } = req.params;
+  try {
+    const deletedTestCase = await deleteTestCaseById(testCaseId as string);
+
+    res.status(200).json(deletedTestCase);
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ error: "failed to delete test case", details: error.message });
+  }
+}

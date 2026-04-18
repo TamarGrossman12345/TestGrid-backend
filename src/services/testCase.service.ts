@@ -59,3 +59,17 @@ export const updateTestCaseById = async (
 
   return updatedTestCase;
 };
+
+
+export const deleteTestCaseById = async (
+  testCasesId: string,
+
+) => {
+  const deletedTestCase = await prisma.testCase.delete({
+    where: {
+      TestCaseId: testCasesId,
+    }
+  });
+
+  return deletedTestCase;
+};
