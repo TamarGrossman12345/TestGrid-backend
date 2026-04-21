@@ -7,12 +7,38 @@ generator client {
     provider = "prisma-client-js"
 }
 
+enum Role {
+  QA
+  DEVELOPER
+  TEAM_LEAD
+  SECTION_LEAD
+}
+
+enum TeamName {
+  PRISMA
+  NEW_SPACE
+  NEXT
+  NEXSOS
+  PLANING
+  PANORAMA
+  SDA
+}
+
+model User {
+  userId  String     @id @default(uuid())
+  username String   @unique
+  password  String
+  team     TeamName
+  role  Role     @default(QA)
+}
+
 model Project {
   projectId   String     @id @default(uuid())
   projectName String
   description String?
   isPrivate   Boolean    @default(false)
   files       TestFile[]
+  team  TeamName 
 }
 
 model TestFile {
