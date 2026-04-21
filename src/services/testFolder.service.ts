@@ -21,3 +21,10 @@ export const deleteFolderById = async (id: string) => {
   });
   return deletedFile;
 };
+
+export const getFoldersByProjectId = async (id: string) => {
+  const folders = await prisma.testFile.findMany({
+    where: { projectId: id },
+  });
+  return folders;
+}

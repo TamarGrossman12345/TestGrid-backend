@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   createNewFolder,
   deleteFolderById,
+  getFoldersByProjectId,
 } from "../services/testFolder.service.js";
 
 export const createFolder = async (req: Request, res: Response) => {
@@ -24,5 +25,17 @@ export const deleteFolder = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not delete folder" });
+  }
+};
+
+export const getFolders = async (req: Request, res: Response) => {
+  const id = req.params.id as string;
+
+  try {
+    const folders = await getFoldersByProjectId(id);
+    res.json(folders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not get folders" });
   }
 };
